@@ -4,15 +4,23 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
+// ✅ Define what a Shopify product looks like
+type ShopifyProduct = {
+  id: string | number;
+  title: string;
+  variants?: { price?: string }[];
+};
+
 export default function DashboardHome() {
   const router = useRouter();
-  const [shopifyProducts, setShopifyProducts] = useState([]);
+
+  // ✅ Give your products an explicit type
+  const [shopifyProducts, setShopifyProducts] = useState<ShopifyProduct[]>([]);
 
   // 🧠 Example: fetch Shopify data (mock for now)
   useEffect(() => {
     const fetchShopifyData = async () => {
       try {
-        // Example API call (when user connects their Shopify store)
         const response = await fetch("/api/shopify/products");
         if (response.ok) {
           const data = await response.json();
@@ -23,7 +31,6 @@ export default function DashboardHome() {
       }
     };
 
-    // In a real app, we only call this if the user has already connected Shopify
     fetchShopifyData();
   }, []);
 
@@ -153,7 +160,7 @@ export default function DashboardHome() {
         </ul>
       </motion.div>
 
-      {/* 🧩 Shopify Data Preview (shows fetched data later) */}
+      {/* 🧩 Shopify Data Preview */}
       {shopifyProducts.length > 0 && (
         <div className="mt-10 bg-white rounded-2xl p-6 shadow">
           <h2 className="text-xl font-semibold text-blue-600 mb-4">
