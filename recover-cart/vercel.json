@@ -2,16 +2,18 @@
   "version": 2,
   "framework": "nextjs",
   "builds": [
-    { "src": "next.config.ts", "use": "@vercel/next" }
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
   ],
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "ignoreCommand": "git check-ignore **/*",
   "routes": [
     { "src": "/(.*)", "dest": "/" }
-  ],
-  "env": {
-    "NEXT_PUBLIC_APP_ENV": "production"
-  },
-  "github": {
-    "enabled": true,
-    "autoJobCancelation": true
-  }
+  ]
 }
