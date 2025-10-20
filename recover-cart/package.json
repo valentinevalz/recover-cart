@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "vercel-build": "npm run build"
-  },
+  "redeploy": "bash ./redeploy.sh",
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint",
+  "vercel-redeploy": "vercel --prod --force --confirm"
+},
   "dependencies": {
     "framer-motion": "^12.23.24",
     "mongoose": "^8.19.1",
