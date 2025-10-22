@@ -1,28 +1,31 @@
-# netlify.toml (place at project root)
 [build]
   command = "npm run build"
   publish = ".next"
   functions = "netlify/functions"
 
-[dev]
-  command = "npm run dev"
-  port = 3000
+# ✅ Force Netlify to always rebuild cleanly (no cache)
+[build.environment]
+  NETLIFY_USE_YARN = "false"
+  NODE_VERSION = "18"
+  NEXT_TELEMETRY_DISABLED = "1"
+  CI = "true"
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+# 🧹 Prevent serving stale cache
+[context.production.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP_CACHE = "true"
+  NEXT_FORCE_CLEAN_BUILD = "true"
 
-[functions]
-  node_bundler = "esbuild"
-  included_files = [
-    "app/**",
-    "lib/**",
-    "models/**",
-    "public/**"
-  ]
-
-# Optional redirects - allow Next.js to handle routing
+# 🚀 Redirects — ensure clean Next.js routing
 [[redirects]]
   from = "/*"
-  to = "/"
+  to = "/index.html"
   status = 200
-  force = false
+
+# 💡 Optional: add security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"

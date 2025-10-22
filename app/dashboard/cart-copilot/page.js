@@ -16,7 +16,7 @@ export default function CartCopilotPage() {
       try {
         const res = await fetch("/api/shopify/checkouts");
         const data = await res.json();
-        if (res.ok) setCheckouts(data.checkouts || []);
+        if (res.ok) setCheckouts(data.checkouts ?? []);
       } catch (err) {
         console.error("Error fetching carts:", err);
       } finally {
@@ -84,7 +84,7 @@ export default function CartCopilotPage() {
       if (res.ok && data.insight) {
         setInsight(data.insight);
       } else {
-        setInsight(data.error || "AI analysis failed.");
+        setInsight(data.error ?? "AI analysis failed.");
       }
     } catch (err) {
       console.error("AI analysis error:", err);
@@ -94,7 +94,7 @@ export default function CartCopilotPage() {
     }
   };
 
-  // 🖥️ 4. Render UI
+  // 🖥 4. Render UI
   return (
     <div className="p-8 min-h-screen bg-blue-50">
       <h1 className="text-3xl font-bold text-blue-700 mb-4">
@@ -121,9 +121,9 @@ export default function CartCopilotPage() {
                 className="p-4 border rounded-xl shadow-sm hover:shadow-md transition"
               >
                 <h2 className="text-lg font-semibold text-blue-600 mb-2">
-                  🧍‍♂️ {cart.email || "Guest"}
+                  🧍‍♂️ {cart.email ?? "Guest"}
                 </h2>
-                <p>Items: {cart.line_items?.length || 0}</p>
+                <p>Items: {cart.line_items?.length ?? 0}</p>
                 <p>Total: ${cart.total_price}</p>
                 <button
                   onClick={() => sendRecoveryEmail(cart)}
