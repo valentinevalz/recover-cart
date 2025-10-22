@@ -1,0 +1,28 @@
+# netlify.toml (place at project root)
+[build]
+  command = "npm run build"
+  publish = ".next"
+  functions = "netlify/functions"
+
+[dev]
+  command = "npm run dev"
+  port = 3000
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = [
+    "app/**",
+    "lib/**",
+    "models/**",
+    "public/**"
+  ]
+
+# Optional redirects - allow Next.js to handle routing
+[[redirects]]
+  from = "/*"
+  to = "/"
+  status = 200
+  force = false
