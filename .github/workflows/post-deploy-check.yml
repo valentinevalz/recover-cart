@@ -1,0 +1,26 @@
+name: 🩺 Post-Deploy Health Check
+
+on:
+  workflow_dispatch:
+  deployment_status:
+    types: [success]
+
+jobs:
+  healthcheck:
+    runs-on: ubuntu-latest
+    if: github.event.deployment_status.state == 'success'
+    steps:
+      - name: 🔍 Check main page
+        run: |
+          echo "Checking main site..."
+          curl -s -o /dev/null -w "%{http_code}" https://recovercart.netlify.app | grep 200
+
+      - name: 🔍 Check Cart-Copilot route
+        run: |
+          echo "Checking Cart-Copilot..."
+          curl -s -o /dev/null -w "%{http_code}" https://recovercart.netlify.app/dashboard/cart-copilot | grep 200
+
+      - name: 🔍 Check Shopify API endpoint
+        run: |
+          echo "Checking API..."
+          curl -s -o /dev/null -w "%{http_code}" https://recovercart.netlify.app/api/shopify/products | grep 200
