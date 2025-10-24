@@ -3,17 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "redeploy": "bash ./redeploy.sh",
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "next lint",
-  "vercel-redeploy": "vercel --prod --force --confirm"
-},
+    "redeploy": "bash ./redeploy.sh",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "vercel-redeploy": "vercel --prod --force --confirm"
+  },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "framer-motion": "^12.23.24",
     "mongoose": "^8.19.1",
     "next": "15.5.4",
+    "next-auth": "^4.24.11",
     "nodemailer": "^7.0.9",
     "openai": "^6.3.0",
     "react": "^18.2.0",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@netlify/plugin-nextjs": "^5.14.3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^18",

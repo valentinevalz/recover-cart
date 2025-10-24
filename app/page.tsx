@@ -14,10 +14,10 @@ type ShopifyProduct = {
 export default function DashboardHome() {
   const router = useRouter();
 
-  // ✅ Give your products an explicit type
+  // ✅ Strongly typed state for products
   const [shopifyProducts, setShopifyProducts] = useState<ShopifyProduct[]>([]);
 
-  // 🧠 Example: fetch Shopify data (mock for now)
+  // 🧠 Fetch Shopify data (mock API call)
   useEffect(() => {
     const fetchShopifyData = async () => {
       try {
@@ -34,6 +34,7 @@ export default function DashboardHome() {
     fetchShopifyData();
   }, []);
 
+  // 🧩 Dashboard Modules
   const modules = [
     {
       id: 1,
@@ -62,7 +63,7 @@ export default function DashboardHome() {
     {
       id: 4,
       name: "Product Intelligence",
-      icon: "🏷️",
+      icon: "🏷",
       color: "bg-pink-100",
       path: "/dashboard/product-intelligence",
       description: "Track top-performing and abandoned products.",
@@ -138,7 +139,7 @@ export default function DashboardHome() {
           href="/dashboard/connect-shopify"
           className="inline-block bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition"
         >
-          🛍️ Connect My Shopify Store
+          🛍 Connect My Shopify Store
         </a>
       </div>
 
@@ -164,7 +165,7 @@ export default function DashboardHome() {
       {shopifyProducts.length > 0 && (
         <div className="mt-10 bg-white rounded-2xl p-6 shadow">
           <h2 className="text-xl font-semibold text-blue-600 mb-4">
-            🛍️ Shopify Products (Example)
+            🛍 Shopify Products (Example)
           </h2>
           <ul className="space-y-2">
             {shopifyProducts.map((product) => (
