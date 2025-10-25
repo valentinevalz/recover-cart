@@ -65,7 +65,9 @@ jobs:
           subject: "🚨 RecoverCart: Health Check Failed!"
           to: ${{ secrets.ALERT_EMAIL }}
           from: "RecoverCart Monitor"
-          body: "One or more health checks failed on https://recovercart.netlify.app. Please investigate the issue."
+          body: |
+            One or more health checks failed on your deployed site.
+            Please investigate the issue at: ${{ secrets.SITE_URL }}
 
   # ======================================================
   # ⏰ 2. Daily Product Intelligence Cron
@@ -97,7 +99,7 @@ jobs:
           subject: "⚠️ RecoverCart Daily Cron Failed"
           to: ${{ secrets.ALERT_EMAIL }}
           from: "RecoverCart AI Cron"
-          body: "The daily Product Intelligence cron job failed to run successfully."
+          body: "The daily Product Intelligence cron job failed to run successfully on ${{ secrets.PROD_URL }}"
 
   # ======================================================
   # 🧠 3. Weekly AI Intelligence Warmup
@@ -129,4 +131,4 @@ jobs:
           subject: "🤖 RecoverCart AI Warmup Failed"
           to: ${{ secrets.ALERT_EMAIL }}
           from: "RecoverCart AI Monitor"
-          body: "The weekly AI warmup endpoint returned an error or failed to respond."
+          body: "The weekly AI warmup endpoint failed to respond correctly on ${{ secrets.PROD_URL }}"
