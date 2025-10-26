@@ -1,23 +1,27 @@
-import { dbConnect } from "@/lib/dbConnect";
+import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 import User from "@/models/User";
+import { dbConnect } from "@/lib/dbConnect";
 
 export async function POST(req) {
   try {
-    const body = await req.json();
-    const { name, email, password } = body;
-
+    const { email, password } = await req.json();
     await dbConnect();
-    const existing = await User.findOne({ email });
-    if (existing) {
-      return new Response(JSON.stringify({ error: "User already exists" }), { status: 400 });
+
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (existingUser) {
+      return NextResponse.json({ error: "User already exists" }, { status: 400 });
     }
 
-    const user = new User({ name, email, password });
-    await user.save();
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.create({
+      email: email.toLowerCase(),
+      password: hashedPassword,
+    });
 
-    return new Response(JSON.stringify({ success: true }), { status: 201 });
-  } catch (err) {
-    console.error("Register error:", err);
-    return new Response(JSON.stringify({ error: "Server error" }), { status: 500 });
+    return NextResponse.json({ message: "User registered successfully" }, { status: 201 });
+  } catch (error) {
+    console.error("Register error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
