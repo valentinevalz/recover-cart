@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 // ✅ Define what a Shopify product looks like
 type ShopifyProduct = {
@@ -13,28 +14,45 @@ type ShopifyProduct = {
 
 export default function DashboardHome() {
   const router = useRouter();
+  const { data: session, status } = useSession();
 
-  // ✅ Strongly typed state for products
   const [shopifyProducts, setShopifyProducts] = useState<ShopifyProduct[]>([]);
 
-  // 🧠 Fetch Shopify data (mock API call)
+  // 🧠 Redirect to login if not authenticated
   useEffect(() => {
-    const fetchShopifyData = async () => {
-      try {
-        const response = await fetch("/api/shopify/products");
-        if (response.ok) {
-          const data = await response.json();
-          setShopifyProducts(data.products || []);
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
+
+  // 🧠 Fetch Shopify data only if authenticated
+  useEffect(() => {
+    if (status === "authenticated") {
+      const fetchShopifyData = async () => {
+        try {
+          const response = await fetch("/api/shopify/products");
+          if (response.ok) {
+            const data = await response.json();
+            setShopifyProducts(data.products || []);
+          }
+        } catch (error) {
+          console.error("Error fetching Shopify data:", error);
         }
-      } catch (error) {
-        console.error("Error fetching Shopify data:", error);
-      }
-    };
+      };
+      fetchShopifyData();
+    }
+  }, [status]);
 
-    fetchShopifyData();
-  }, []);
+  // 🔄 Loading state
+  if (status === "loading") {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-gray-600">
+        Checking authentication...
+      </div>
+    );
+  }
 
-  // 🧩 Dashboard Modules
+  // 🧭 Dashboard modules (same as yours)
   const modules = [
     {
       id: 1,
@@ -118,7 +136,9 @@ export default function DashboardHome() {
             onClick={() => router.push(mod.path)}
           >
             <div className="text-4xl mb-3">{mod.icon}</div>
-            <h2 className="text-xl font-bold text-blue-700 mb-2">{mod.name}</h2>
+            <h2 className="text-xl font-bold text-blue-700 mb-2">
+              {mod.name}
+            </h2>
             <p className="text-gray-700 text-sm mb-4">{mod.description}</p>
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition text-sm"
@@ -133,7 +153,7 @@ export default function DashboardHome() {
         ))}
       </motion.div>
 
-      {/* 🟢 Connect Shopify Section */}
+      {/* 🟢 Connect Shopify */}
       <div className="text-center mt-10">
         <a
           href="/dashboard/connect-shopify"
